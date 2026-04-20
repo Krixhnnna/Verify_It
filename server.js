@@ -38,7 +38,16 @@ app.get('/api', async (req, res) => {
 });
 
 // Navigation
-app.get('/', (req, res) => res.render('index.html'));
+app.get('/', async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT stat_value FROM site_stats WHERE stat_name = 'total_fakes_found'");
+    const totalSolved = rows.length ? rows[0].stat_value : 0;
+    res.render('index.html', { totalSolved });
+  } catch (err) {
+    res.render('index.html', { totalSolved: 534 }); // Fallback
+  }
+});
+
 app.get('/about', (req, res) => res.render('about.html'));
 
 // Verification Logic
@@ -50,8 +59,14 @@ app.post('/check', async (req, res) => {
   const serial = req.body.serial_number.trim().toUpperCase();
   try {
     const { rows } = await pool.query('SELECT * FROM products WHERE serial_number = $1', [serial]);
+    const isCounterfeit = rows.length === 0;
+
+    if (isCounterfeit) {
+      await pool.query("UPDATE site_stats SET stat_value = stat_value + 1 WHERE stat_name = 'total_fakes_found'");
+    }
+
     res.render('verify.html', {
-      result: rows.length ? 'genuine' : 'counterfeit',
+      result: isCounterfeit ? 'counterfeit' : 'genuine',
       serial: serial,
       product: rows[0] || null
     });
