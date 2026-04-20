@@ -38,8 +38,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 // ----------------------------
 
-// HEALTH CHECK for Deployment
-app.get('/ping', (req, res) => res.send('pong'));
+// HEALTH CHECK for Deployment (Tests DB connection)
+app.get('/ping', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.send('pong (Database: OK)');
+  } catch (err) {
+    console.error('Ping DB Error:', err.message);
+    res.send(`pong (Database: Error - ${err.message})`);
+  }
+});
 
 // HOME PAGE - Landing Page
 app.get('/', (req, res) => {
