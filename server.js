@@ -73,11 +73,14 @@ app.post('/contact', (req, res) => {
   const reportPath = path.join(__dirname, 'reports.json');
 
   try {
-    const reports = fs.existsSync(reportPath) ? JSON.parse(fs.readFileSync(reportPath)) : [];
+    let reports = [];
+    if (fs.existsSync(reportPath) && fs.statSync(reportPath).size > 0) {
+      reports = JSON.parse(fs.readFileSync(reportPath));
+    }
     reports.push({ name, email, message, date: new Date().toLocaleString() });
     fs.writeFileSync(reportPath, JSON.stringify(reports, null, 2));
   } catch (err) {
-    console.warn('Filesystem is read-only (expected on Vercel). Report not saved localy.');
+    console.warn('Report not saved:', err.message);
   }
 
   res.render('contact.html', { sent: true });

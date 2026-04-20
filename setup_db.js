@@ -39,15 +39,15 @@ const setup = async () => {
 
     // 2. Data Cleaning
     const serialNumbers = [
-      'APPLE-2024-001', 
-      'NIKE-2024-XYZ', 
-      'SONY-WH1000XM5', 
+      'APPLE-2024-001',
+      'NIKE-2024-XYZ',
+      'SONY-WH1000XM5',
       'SAM-GALAXY-S24'
     ];
-    
+
     console.log('🔄 Refreshing sample product data...');
     await client.query('DELETE FROM products WHERE serial_number = ANY($1)', [serialNumbers]);
-    
+
     // 3. Data Seeding
     await client.query(`
       INSERT INTO products (serial_number, product_name, brand, manufacture_date) 
