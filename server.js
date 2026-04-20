@@ -24,7 +24,7 @@ const pool = new Pool({
 // ----------------------------
 async function initDB() {
   try {
-    console.log('🔄 Checking database structure...');
+    console.log('🔄 Verifying Cloud Database...');
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS products (
         id            SERIAL PRIMARY KEY,
@@ -39,7 +39,7 @@ async function initDB() {
 
     const checkRows = await pool.query('SELECT COUNT(*) FROM products');
     if (parseInt(checkRows.rows[0].count) === 0) {
-      console.log('🌱 Seeding database with sample products...');
+      console.log('🌱 Seed required. Adding sample products...');
       const seedQuery = `
         INSERT INTO products (serial_number, product_name, brand, manufacture_date) VALUES
           ('APPLE-2024-001', 'iPhone 15 Pro', 'Apple', '2024-01-10'),
@@ -48,11 +48,11 @@ async function initDB() {
           ('SAM-GALAXY-S24', 'Galaxy S24 Ultra', 'Samsung', '2024-01-25');
       `;
       await pool.query(seedQuery);
-      console.log('✅ Seeding complete.');
+      console.log('✅ Database seeded successfully.');
     }
-    console.log('✅ Database architecture is ready.');
+    console.log('✅ Database is live and ready.');
   } catch (err) {
-    console.error('❌ Database Initialization Error:', err.message);
+    console.error('⚠️ Database Auto-Setup Warning:', err.message);
   }
 }
 
