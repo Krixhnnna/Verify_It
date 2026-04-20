@@ -33,6 +33,19 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => res.render('index.html'));
 app.get('/about', (req, res) => res.render('about.html'));
 
+app.get('/admin', (req, res) => {
+  const p = path.join(__dirname, 'reports.json');
+  let reports = [];
+  try {
+    if (fs.existsSync(p) && fs.statSync(p).size > 0) {
+      reports = JSON.parse(fs.readFileSync(p)).reverse();
+    }
+  } catch (e) {
+    console.warn('Error reading reports:', e.message);
+  }
+  res.render('admin.html', { reports });
+});
+
 // Verification Logic
 app.get('/verify', (req, res) => {
   res.render('verify.html', { result: null, serial: null });
