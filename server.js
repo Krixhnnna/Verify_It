@@ -4,11 +4,12 @@
 
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ----------------------------
 // PostgreSQL Connection Setup
@@ -19,29 +20,29 @@ const pool = new Pool({
 });
 
 // ----------------------------
-// Middleware
+// Middleware & View Engine
 // ----------------------------
 app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
-app.set('views', './views');
-app.use(express.static('public'));   // Serve CSS/JS files
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ----------------------------
 // Routes
 // ----------------------------
 
-// HOME PAGE - Landing Page
+// HOME PAGE
 app.get('/', (req, res) => {
   res.render('index.html');
 });
 
-// VERIFY PAGE - Serial Number Checker
+// VERIFY PAGE
 app.get('/verify', (req, res) => {
   res.render('verify.html', { result: null, serial: null });
 });
 
-// CHECK SERIAL - Form submission
+// CHECK SERIAL
 app.post('/check', async (req, res) => {
   const serial = req.body.serial_number.trim().toUpperCase();
 
@@ -73,7 +74,7 @@ app.get('/about', (req, res) => {
   res.render('about.html');
 });
 
-// CONTACT FORM
+// CONTACT PAGE
 app.get('/contact', (req, res) => {
   res.render('contact.html', { sent: false });
 });
@@ -82,19 +83,31 @@ app.get('/contact', (req, res) => {
 app.post('/contact', (req, res) => {
   const { name, email, message } = req.body;
   
-  // Save to JSON file
-  const report = { name, email, message, date: new Date().toLocaleString() };
-  const reports = fs.existsSync('reports.json') ? JSON.parse(fs.readFileSync('reports.json')) : [];
-  reports.push(report);
-  fs.writeFileSync('reports.json', JSON.stringify(reports, null, 2));
+  // Save to JSON file (ONLY LOCALLY - Vercel filesystem is read-only)
+  if (!process.env.VERCEL) {
+    try {
+      const report = { name, email, message, date: new Date().toLocaleString() };
+      const reportsFile = path.join(__dirname, 'reports.json');
+      const reports = fs.existsSync(reportsFile) ? JSON.parse(fs.readFileSync(reportsFile)) : [];
+      reports.push(report);
+      fs.writeFileSync(reportsFile, JSON.stringify(reports, null, 2));
+    } catch (e) {
+      console.error('Local JSON save error:', e);
+    }
+  }
 
-  console.log(`Report saved: ${name} (${email})`);
+  console.log(`Report received from ${name} (${email})`);
   res.render('contact.html', { sent: true });
 });
 
 // ----------------------------
 // Start Server
 // ----------------------------
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`✅ Server running at http://localhost:${PORT}`);
+  });
+}
+
+// Export for Vercel
+module.exports = app;
