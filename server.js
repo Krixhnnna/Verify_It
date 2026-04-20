@@ -4,6 +4,7 @@
 
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 
@@ -29,13 +30,16 @@ const pool = new Pool({
 // ----------------------------
 app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
-app.set('views', './views');
-app.use(express.static('public'));   // Serve CSS/JS files
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ----------------------------
 // Routes
 // ----------------------------
+
+// HEALTH CHECK for Deployment
+app.get('/ping', (req, res) => res.send('pong'));
 
 // HOME PAGE - Landing Page
 app.get('/', (req, res) => {
@@ -88,13 +92,18 @@ app.get('/contact', (req, res) => {
 app.post('/contact', (req, res) => {
   const { name, email, message } = req.body;
 
-  // Save to JSON file
-  const report = { name, email, message, date: new Date().toLocaleString() };
-  const reports = fs.existsSync('reports.json') ? JSON.parse(fs.readFileSync('reports.json')) : [];
-  reports.push(report);
-  fs.writeFileSync('reports.json', JSON.stringify(reports, null, 2));
+  // Save to JSON file (Only if filesystem is writable)
+  try {
+    const reportPath = path.join(__dirname, 'reports.json');
+    const report = { name, email, message, date: new Date().toLocaleString() };
+    const reports = fs.existsSync(reportPath) ? JSON.parse(fs.readFileSync(reportPath)) : [];
+    reports.push(report);
+    fs.writeFileSync(reportPath, JSON.stringify(reports, null, 2));
+  } catch (err) {
+    console.warn('Filesystem is read-only (expected on Vercel). Report not saved to JSON.');
+  }
 
-  console.log(`Report saved: ${name} (${email})`);
+  console.log(`Report received: ${name} (${email})`);
   res.render('contact.html', { sent: true });
 });
 
