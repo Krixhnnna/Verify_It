@@ -29,17 +29,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // --- Routes ---
-
-// Health check and diagnostic
-app.get('/ping', async (req, res) => {
-  try {
-    await pool.query('SELECT 1');
-    res.send('pong (Database: OK)');
-  } catch (err) {
-    res.send(`pong (Database: Error - ${err.message})`);
-  }
-});
-
 // Navigation
 app.get('/', (req, res) => res.render('index.html'));
 app.get('/about', (req, res) => res.render('about.html'));
