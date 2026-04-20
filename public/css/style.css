@@ -59,8 +59,11 @@ nav {
 .nav-links a {
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .nav-links a:hover,
@@ -71,34 +74,59 @@ nav {
 .menu-toggle {
   display: none;
   background: none;
-  border: 1px solid var(--border);
-  color: var(--accent);
-  padding: 0.5rem 0.8rem;
-  border-radius: 6px;
-  font-family: Outfit, sans-serif;
-  font-weight: 700;
+  border: none;
+  width: 30px;
+  height: 20px;
+  position: relative;
   cursor: pointer;
-  font-size: 0.9rem;
+  z-index: 20;
 }
 
+.menu-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  position: absolute;
+  transition: .3s ease;
+}
+
+.menu-toggle span:nth-child(1) { top: 0; }
+.menu-toggle span:nth-child(2) { top: 9px; }
+.menu-toggle span:nth-child(3) { top: 18px; }
+
+/* Hamburger to X Animation */
+.nav-active .menu-toggle span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+.nav-active .menu-toggle span:nth-child(2) { opacity: 0; }
+.nav-active .menu-toggle span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
 @media (max-width: 650px) {
-  nav { padding: 1rem 1.5rem; }
+  nav { padding: 1.2rem 1.5rem; }
   .menu-toggle { display: block; }
   .nav-links {
-    display: none;
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(15px);
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(20px);
     flex-direction: column;
-    padding: 2rem;
-    gap: 1.5rem;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 15;
   }
-  .nav-active .nav-links { display: flex; }
+  .nav-links a { font-size: 1.5rem; font-weight: 600; }
+  .nav-active .nav-links {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
 }
 
 .page {

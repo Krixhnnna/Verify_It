@@ -6,17 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         const target = e.target;
-
-        // Example: Handle the "Check Now" button click via delegation
         if (target.matches('.btn') && target.getAttribute('href') === '/verify') {
             console.log('🚀 Redirecting to verification engine...');
         }
         
         // Mobile Menu Toggle logic
-        if (target.matches('.menu-toggle')) {
-            const nav = target.closest('nav');
-            nav.classList.toggle('nav-active');
-            target.textContent = nav.classList.contains('nav-active') ? 'CLOSE' : 'MENU';
+        if (target.closest('.menu-toggle')) {
+            target.closest('nav').classList.toggle('nav-active');
         }
         
         // Example: Handle logo clicks
