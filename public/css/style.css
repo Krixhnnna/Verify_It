@@ -1,19 +1,19 @@
-/* =============================================
-   VERIFYIT - PREMIUM DESIGN SYSTEM
-   ============================================= */
+/* 
+  VERIFYIT - PREMIUM DESIGN SYSTEM 
+--------------------------------------------- */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800&display=swap');
 
 :root {
-  --bg: #000000;
+  --bg: #000;
   --card: #0a0a0a;
   --accent: #10b981;
-  --text: #ffffff;
-  --muted: #888888;
-  --border: #222222;
+  --text: #fff;
+  --muted: #888;
+  --border: #222;
 }
 
-/* --- Base Reset --- */
+/* BASE STYLES */
 * {
   margin: 0;
   padding: 0;
@@ -23,29 +23,28 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   line-height: 1.6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* --- Navigation --- */
+/* NAVIGATION */
 nav {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  z-index: 100;
+  z-index: 10;
 }
 
 .nav-logo {
-  font-family: 'Outfit', sans-serif;
+  font-family: Outfit, sans-serif;
   font-size: 1.4rem;
   color: var(--accent);
   text-decoration: none;
@@ -67,7 +66,6 @@ nav {
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
-  transition: color 0.2s ease;
 }
 
 .nav-links a:hover,
@@ -75,7 +73,7 @@ nav {
   color: #fff;
 }
 
-/* --- Layout & Grid --- */
+/* LAYOUT & PAGE WRAPPER */
 .page {
   flex: 1;
   width: 100%;
@@ -86,6 +84,7 @@ nav {
   flex-direction: column;
 }
 
+/* HERO SECTION */
 .hero {
   text-align: center;
   margin: auto;
@@ -100,6 +99,7 @@ nav {
 .hero p,
 .hero .page-tag {
   text-align: center;
+  width: 100%;
 }
 
 .hero p {
@@ -107,18 +107,17 @@ nav {
   max-width: 600px;
 }
 
-/* --- Typography --- */
 .page-tag {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--accent);
   text-transform: uppercase;
   margin-bottom: 0.8rem;
-  letter-spacing: 0.05em;
 }
 
+/* TYPOGRAPHY */
 h1 {
-  font-family: 'Outfit', sans-serif;
+  font-family: Outfit, sans-serif;
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   font-weight: 800;
   line-height: 1.1;
@@ -126,7 +125,7 @@ h1 {
 }
 
 h2 {
-  font-family: 'Outfit', sans-serif;
+  font-family: Outfit, sans-serif;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -136,7 +135,7 @@ p {
   font-size: 1.1rem;
 }
 
-/* --- Components --- */
+/* UI COMPONENTS */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -162,14 +161,13 @@ input[type="text"],
 input[type="email"],
 textarea {
   width: 100%;
-  background: #111111;
+  background: #111;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.9rem 1.1rem;
   color: #fff;
   font: inherit;
   outline: none;
-  transition: border-color 0.2s ease;
 }
 
 input:focus,
@@ -183,24 +181,23 @@ textarea:focus {
   border: none;
   border-radius: 10px;
   padding: 0.9rem 2.2rem;
-  font-family: 'Outfit', sans-serif;
+  font-family: Outfit, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   width: fit-content;
   text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.btn:hover {
-  opacity: 0.9;
 }
 
 .hero .btn {
   align-self: center;
 }
 
-/* --- Result Displays --- */
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* RESULT BOXES */
 .result-box {
   border-radius: 14px;
   padding: 1.8rem;
@@ -225,7 +222,7 @@ textarea:focus {
 }
 
 .result-title {
-  font-family: 'Outfit', sans-serif;
+  font-family: Outfit, sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 0.3rem;
@@ -239,9 +236,8 @@ textarea:focus {
   color: #f87171;
 }
 
-/* --- Utilities --- */
 .badge {
-  background: #111111;
+  background: #111;
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.3rem 0.7rem;
@@ -250,6 +246,7 @@ textarea:focus {
   display: inline-block;
 }
 
+/* SECTION GRIDS */
 .steps {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -265,7 +262,7 @@ textarea:focus {
 }
 
 .step-num {
-  font-family: 'Outfit', sans-serif;
+  font-family: Outfit, sans-serif;
   font-size: 2.2rem;
   font-weight: 800;
   color: var(--accent);
@@ -273,7 +270,7 @@ textarea:focus {
   margin-bottom: 0.5rem;
 }
 
-/* --- Footer --- */
+/* FOOTER */
 footer {
   text-align: center;
   padding: 4rem 2rem;
@@ -282,15 +279,10 @@ footer {
   border-top: 1px solid var(--border);
 }
 
-/* --- Animations --- */
+/* ANIMATIONS */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .fade-in {
