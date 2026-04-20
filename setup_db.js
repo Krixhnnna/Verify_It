@@ -24,8 +24,8 @@ const setup = async () => {
     await client.connect();
     console.log('✅ Connected.');
 
-    // 1. Create the Products Table
-    console.log('🔄 Ensuring "products" table exists...');
+    // 1. Create Tables
+    console.log('🔄 Ensuring tables exist...');
     await client.query(`
       CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
@@ -34,6 +34,14 @@ const setup = async () => {
         brand VARCHAR(100),
         manufacture_date DATE,
         registered_at TIMESTAMP DEFAULT NOW()
+      );
+
+      CREATE TABLE IF NOT EXISTS reports (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100),
+        email VARCHAR(100),
+        message TEXT,
+        date TIMESTAMP DEFAULT NOW()
       );
     `);
 

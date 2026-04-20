@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
@@ -7,7 +6,7 @@ const app = express();
 const PORT = 3000;
 
 // --- Database Configuration ---
-const dbConfig = process.env.DATABASE_URL ? {
+const pool = new Pool(process.env.DATABASE_URL ? {
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 } : {
@@ -16,9 +15,7 @@ const dbConfig = process.env.DATABASE_URL ? {
   password: '123',
   database: 'counterfeit_db',
   port: 5432,
-};
-
-const pool = new Pool(dbConfig);
+});
 
 // --- Middleware & View Engine ---
 app.set('view engine', 'html');
@@ -29,6 +26,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // --- Routes ---
+
+// Health Check / API Reports
+app.get('/api', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM reports ORDER BY date DESC');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Navigation
 app.get('/', (req, res) => res.render('index.html'));
 app.get('/about', (req, res) => res.render('about.html'));
@@ -52,30 +60,23 @@ app.post('/check', async (req, res) => {
   }
 });
 
-app.get('/api', (req, res) => {
-  res.sendFile(path.join(__dirname, 'reports.json'));
-});
 // Contact Reporting
 app.get('/contact', (req, res) => {
   res.render('contact.html', { sent: false });
 });
 
-app.post('/contact', (req, res) => {
+app.post('/contact', async (req, res) => {
   const { name, email, message } = req.body;
-  const reportPath = path.join(__dirname, 'reports.json');
-
   try {
-    let reports = [];
-    if (fs.existsSync(reportPath) && fs.statSync(reportPath).size > 0) {
-      reports = JSON.parse(fs.readFileSync(reportPath));
-    }
-    reports.push({ name, email, message, date: new Date().toLocaleString() });
-    fs.writeFileSync(reportPath, JSON.stringify(reports, null, 2));
+    await pool.query(
+      'INSERT INTO reports (name, email, message) VALUES ($1, $2, $3)',
+      [name, email, message]
+    );
+    res.render('contact.html', { sent: true });
   } catch (err) {
-    console.warn('Report not saved:', err.message);
+    console.error('DB Report Error:', err.message);
+    res.render('contact.html', { sent: false });
   }
-
-  res.render('contact.html', { sent: true });
 });
 
 // --- Server Bootstrap ---
