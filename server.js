@@ -52,6 +52,9 @@ app.post('/check', async (req, res) => {
   }
 });
 
+app.get('/api', (req, res) => {
+  res.sendFile(path.join(__dirname, 'reports.json'));
+});
 // Contact Reporting
 app.get('/contact', (req, res) => {
   res.render('contact.html', { sent: false });
