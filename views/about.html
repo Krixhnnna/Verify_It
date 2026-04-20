@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — VerifyIt</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Verify<span>It</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/verify">Verify</a></li>
+    <li><a href="/about" class="active">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page fade-in">
+
+  <p class="page-tag">📖 About the Project</p>
+  <h1>How VerifyIt Works</h1>
+  <p>
+    VerifyIt is an anti-counterfeit system that helps consumers and businesses verify
+    the authenticity of products using unique serial numbers stored in a secure PostgreSQL database.
+  </p>
+
+  <!-- HOW IT WORKS STEPS -->
+  <div style="margin-top: 2.5rem;">
+    <h2>The Process</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <h2>Manufacturer Registers</h2>
+        <p>Genuine manufacturers register their product serial numbers into our secure database before shipping.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <h2>Consumer Checks</h2>
+        <p>The buyer enters the serial number found on the product or its packaging into our website.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <h2>Database Lookup</h2>
+        <p>Our Express server queries the PostgreSQL database for a matching serial number instantly.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <h2>Result Returned</h2>
+        <p>If the serial exists → Genuine. If not found → Counterfeit alert is shown to the user.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="card" style="margin-top: 2.5rem;">
+    <h2>Technology Stack</h2>
+    <p style="margin-bottom: 1rem;">This project is built with simple, industry-standard tools that are easy to understand:</p>
+
+    <div class="result-info">
+      <span class="badge">🟢 Node.js — Runtime</span>
+      <span class="badge">🚂 Express.js — Web Server</span>
+      <span class="badge">🐘 PostgreSQL — Database</span>
+      <span class="badge">🎨 EJS — HTML Templates</span>
+      <span class="badge">🎯 CSS — Styling</span>
+    </div>
+  </div>
+
+  <!-- WHY IT MATTERS -->
+  <div class="card" style="margin-top: 1.5rem;">
+    <h2>Why This Matters</h2>
+    <p>
+      Counterfeit products cost the global economy over <strong style="color: var(--text);">$500 billion</strong> annually.
+      They are dangerous (fake medicines, electronics), harm brand reputations, and cheat consumers.
+      A simple serial-number verification system can significantly reduce counterfeiting.
+    </p>
+  </div>
+
+</div>
+
+<footer>© 2024 VerifyIt — Counterfeit Detection System</footer>
+
+</body>
+</html>

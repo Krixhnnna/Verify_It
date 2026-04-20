@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VerifyIt — Counterfeit Checker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="/" class="nav-logo">Verify<span>It</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/verify" class="active">Verify</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="page fade-in">
+
+  <p class="page-tag">🛡 Anti-Counterfeit System</p>
+  <h1>Is Your Product Genuine?</h1>
+  <p>Enter the serial number printed on your product or packaging to instantly verify its authenticity.</p>
+
+  <!-- SERIAL NUMBER FORM -->
+  <div class="card">
+    <form action="/check" method="POST">
+      <div class="form-group">
+        <label for="serial_number">Serial Number</label>
+        <input
+          type="text"
+          id="serial_number"
+          name="serial_number"
+          placeholder="e.g. APPLE-2024-001"
+          value="<%= serial || '' %>"
+          required
+          autocomplete="off"
+        >
+      </div>
+      <button type="submit" class="btn">🔍 Verify Product</button>
+    </form>
+  </div>
+
+  <!-- RESULT DISPLAY -->
+  <% if (result === 'genuine') { %>
+    <div class="result-box genuine">
+      <div class="result-icon">✅</div>
+      <div>
+        <div class="result-title">Genuine Product Confirmed</div>
+        <p>Serial number <strong><%= serial %></strong> is registered in our database.</p>
+        <% if (product) { %>
+          <div class="result-info">
+            <span class="badge">📦 <%= product.product_name %></span>
+            <span class="badge">🏷 <%= product.brand %></span>
+            <span class="badge">📅 <%= new Date(product.manufacture_date).toDateString() %></span>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+  <% } else if (result === 'counterfeit') { %>
+    <div class="result-box counterfeit">
+      <div class="result-icon">⚠️</div>
+      <div>
+        <div class="result-title">Counterfeit Alert!</div>
+        <p>Serial number <strong><%= serial %></strong> was <strong>not found</strong> in our database. This product may be fake.</p>
+        <p style="margin-top:0.5rem; font-size:0.88rem;">Please stop using it and <a href="/contact" style="color:inherit; text-decoration:underline;">report it to us</a>.</p>
+      </div>
+    </div>
+
+  <% } else if (result === 'error') { %>
+    <div class="result-box counterfeit">
+      <div class="result-icon">❌</div>
+      <div>
+        <div class="result-title">Database Error</div>
+        <p>Could not connect to the database. Please try again later.</p>
+      </div>
+    </div>
+  <% } %>
+
+</div>
+
+<footer>© 2024 VerifyIt — Counterfeit Detection System</footer>
+
+</body>
+</html>
