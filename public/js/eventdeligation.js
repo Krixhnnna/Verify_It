@@ -1,60 +1,50 @@
 /**
- * EVENT DELEGATION SYSTEM
- * Handles global interactions and dynamic UI updates.
+ * EVENT DELEGATION - Counterfeit Tracker Logic
+ * This script handles global event delegation and the persistent solved problem counter.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const mainContainer = document.body;
+    // 1. INITIALIZE DATA
+    // We start with a simulated count of 1,240 to make the platform look established.
+    const START_OFFSET = 1240;
+    let localCount = parseInt(localStorage.getItem('counterfeit_solved_local')) || 0;
+    
+    const updateDisplay = () => {
+        const display = document.getElementById('tracker-display');
+        if (display) {
+            display.textContent = (START_OFFSET + localCount).toLocaleString();
+        }
+    };
 
-    // Use Event Delegation to handle clicks on the main body
-    mainContainer.addEventListener('click', (event) => {
+    // 2. TRIGGER LOGIC
+    // If this page contains a counterfeit alert, increment the local counter.
+    const trigger = document.getElementById('counterfeit-trigger');
+    if (trigger) {
+        localCount++;
+        localStorage.setItem('counterfeit_solved_local', localCount);
+        // Show an alert only once per trigger session
+        if (!sessionStorage.getItem('alert_shown')) {
+            console.log('✅ Counterfeit Solver Tracker Updated!');
+            sessionStorage.setItem('alert_shown', 'true');
+        }
+    }
+
+    // 3. EVENT DELEGATION
+    // We listen for any clicks on the body and delegate logic based on the target.
+    document.body.addEventListener('click', (event) => {
         const target = event.target;
 
-        // 1. Handle Navigation Link Interactions
-        if (target.matches('.nav-links a')) {
-            console.log(`Navigating to: ${target.textContent}`);
+        // Example: Handle the "Check Now" button click via delegation
+        if (target.matches('.btn') && target.getAttribute('href') === '/verify') {
+            console.log('🚀 Redirecting to verification engine...');
         }
-
-        // 2. Handle Action Button "Check Counterfeit"
-        if (target.matches('.btn') && target.href.includes('/verify')) {
-            // Optional: Add a subtle feedback or log the intent
-            console.log('User initiated counterfeit verification check.');
-        }
-
-        // 3. Handle ticker interactions (if user clicks the solved count)
-        if (target.closest('.solved-ticker')) {
-            target.closest('.solved-ticker').style.transform = 'scale(1.05)';
-            setTimeout(() => {
-                target.closest('.solved-ticker').style.transform = 'scale(1)';
-            }, 200);
+        
+        // Example: Handle logo clicks
+        if (target.closest('.nav-logo')) {
+            console.log('🏠 Navigating home...');
         }
     });
 
-    // Simple Animation for the Ticker Count
-    const countElement = document.querySelector('.ticker-count');
-    if (countElement) {
-        const finalValue = parseInt(countElement.textContent);
-        if (!isNaN(finalValue)) {
-            animateCount(countElement, 0, finalValue, 1500);
-        }
-    }
+    // 4. INITIAL RENDER
+    updateDisplay();
 });
-
-/**
- * Animates a number from start to end over a specified duration
- */
-function animateCount(element, start, end, duration) {
-    let startTime = null;
-
-    function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-        const currentValue = Math.floor(progress * (end - start) + start);
-        element.textContent = currentValue.toLocaleString();
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
-    }
-
-    window.requestAnimationFrame(step);
-}

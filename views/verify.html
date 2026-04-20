@@ -63,7 +63,7 @@
     </div>
 
   <% } else if (result === 'counterfeit') { %>
-    <div class="result-box counterfeit">
+    <div class="result-box counterfeit" id="counterfeit-trigger">
       <div class="result-icon">⚠️</div>
       <div>
         <div class="result-title">Counterfeit Alert!</div>
@@ -83,6 +83,8 @@
   <% } %>
 
 </div>
+
+<script src="/js/eventdeligation.js"></script>
 
 <footer>© 2024 VerifyIt — Counterfeit Detection System</footer>
 
