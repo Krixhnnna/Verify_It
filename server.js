@@ -14,11 +14,8 @@ const PORT = 3000;
 // PostgreSQL Connection Setup
 // ----------------------------
 const pool = new Pool({
-  host: 'localhost',
-  user: 'postgres',
-  password: 'tanish@2807',   
-  database: 'counterfeit_db', 
-  port: 5432,
+  connectionString: process.env.POSTGRES_URL || 'postgres://postgres:123@localhost:5432/counterfeit_db',
+  ssl: process.env.POSTGRES_URL ? { rejectUnauthorized: false } : false
 });
 
 // ----------------------------
