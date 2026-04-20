@@ -1,14 +1,9 @@
--- =============================================
---  DATABASE SETUP (run this in PostgreSQL)
--- =============================================
 
--- Step 1: Create the database
 CREATE DATABASE counterfeit_db;
 
--- Step 2: Connect to the database
+
 \c counterfeit_db;
 
--- Step 3: Create the products table
 CREATE TABLE products (
   id            SERIAL PRIMARY KEY,
   serial_number VARCHAR(50) UNIQUE NOT NULL,
@@ -18,7 +13,7 @@ CREATE TABLE products (
   registered_at TIMESTAMP DEFAULT NOW()
 );
 
--- Step 4: Add some sample genuine products
+
 INSERT INTO products (serial_number, product_name, brand, manufacture_date) VALUES
   ('APPLE-2024-001', 'iPhone 15 Pro', 'Apple', '2024-01-10'),
   ('NIKE-2024-XYZ', 'Air Max 2024', 'Nike', '2024-03-15'),

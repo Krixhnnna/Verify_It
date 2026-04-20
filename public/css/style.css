@@ -136,23 +136,16 @@ p {
 }
 
 /* TRACKER */
-.solve-tracker {
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-weight: 600;
-  color: var(--muted);
-  font-size: 0.9rem;
+.solve-tracker { 
+  margin: 1rem 0; 
+  color: var(--muted); 
+  font-weight: bold; 
 }
-
-.solve-count {
-  color: var(--accent);
-  background: rgba(16, 185, 129, 0.1);
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
-  font-family: Outfit, sans-serif;
-  letter-spacing: 0.5px;
+.solve-count { 
+  color: var(--accent); 
+  background: #111; 
+  padding: 4px 8px; 
+  border-radius: 4px; 
 }
 
 /* UI COMPONENTS */
