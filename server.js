@@ -81,7 +81,17 @@ app.post('/check', async (req, res) => {
       });
     }
   } catch (err) {
-    console.error('Database error:', err);
+    console.error('Database Error:', err.message);
+    
+    // Check if the error is because the table doesn't exist yet
+    if (err.message.includes('relation "products" does not exist')) {
+      return res.render('verify.html', { 
+        result: 'setup_required', 
+        serial: serial, 
+        product: null 
+      });
+    }
+
     res.render('verify.html', { result: 'error', serial: serial, product: null });
   }
 });

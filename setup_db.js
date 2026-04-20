@@ -1,9 +1,10 @@
 const { Client, Pool } = require('pg');
 
 async function setup() {
-  // 1. Try to connect to the default 'postgres' database to create our new DB
-  // We'll try with a few common local setups
+  // 1. Try to connect to the database
+  // If a DATABASE_URL is provided in the environment, use it first!
   const configs = [
+    process.env.DATABASE_URL ? { connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } } : null,
     { user: 'postgres', host: '/tmp', port: 5432, database: 'postgres' }, // Unix Socket
     { user: 'krishnapandey', host: '/tmp', port: 5432, database: 'postgres' }, // Current user Unix Socket
     { user: 'postgres', host: 'localhost', port: 5432, database: 'postgres' }, // No password (trust)
@@ -14,6 +15,7 @@ async function setup() {
 
   let client;
   for (const config of configs) {
+    if (!config) continue; // Skip if null
     try {
       client = new Client(config);
       await client.connect();

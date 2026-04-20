@@ -72,6 +72,16 @@
       </div>
     </div>
 
+  <% } else if (result === 'setup_required') { %>
+    <div class="result-box counterfeit" style="background: rgba(255, 165, 0, 0.1); border-color: rgba(255, 165, 0, 0.2);">
+      <div class="result-icon">⚙️</div>
+      <div>
+        <div class="result-title" style="color: #ffa500;">Database Setup Required</div>
+        <p>The database is connected, but it has not been initialized with product data yet.</p>
+        <p style="margin-top:0.5rem; font-size:0.88rem;">Please run <strong>node setup_db.js</strong> to populate your database.</p>
+      </div>
+    </div>
+
   <% } else if (result === 'error') { %>
     <div class="result-box counterfeit">
       <div class="result-icon">❌</div>
