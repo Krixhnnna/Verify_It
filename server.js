@@ -131,7 +131,7 @@ app.post('/manufacturer/login', async (req, res) => {
       const match = await bcrypt.compare(password, rows[0].password);
       if (match) {
         req.session.manufacturer = rows[0];
-        return res.redirect('/manufacturer/verify');
+        return res.redirect('/manufacturer/manage');
       }
     }
     res.render('manufacturer-login.html', { error: 'Invalid username or password' });
@@ -140,8 +140,8 @@ app.post('/manufacturer/login', async (req, res) => {
   }
 });
 
-app.get('/manufacturer/verify', isAuthenticated, (req, res) => {
-  res.render('manufacturer-verify.html', { 
+app.get('/manufacturer/manage', isAuthenticated, (req, res) => {
+  res.render('manufacturer-manage.html', { 
     manufacturer: req.session.manufacturer,
     success: req.query.success === 'true',
     error: req.query.error || null
@@ -156,9 +156,9 @@ app.post('/manufacturer/add-serial', isAuthenticated, async (req, res) => {
       'INSERT INTO products (serial_number, product_name, brand, manufacture_date, manufacturer_id) VALUES ($1, $2, $3, $4, $5)',
       [serial_number.toUpperCase(), product_name, brand, manufacture_date, manufacturer_id]
     );
-    res.redirect('/manufacturer/verify?success=true');
+    res.redirect('/manufacturer/manage?success=true');
   } catch (err) {
-    res.redirect(`/manufacturer/verify?error=${encodeURIComponent(err.message)}`);
+    res.redirect(`/manufacturer/manage?error=${encodeURIComponent(err.message)}`);
   }
 });
 
