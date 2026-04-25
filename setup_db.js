@@ -4,8 +4,39 @@ const setup = async () => {
   try {
     await c.connect();
     console.log('✅ Connected');
-    await c.query(`CREATE TABLE IF NOT EXISTS products (id SERIAL, serial_number VARCHAR UNIQUE, product_name VARCHAR, brand VARCHAR, manufacture_date DATE, registered_at TIMESTAMP DEFAULT NOW());
-                   CREATE TABLE IF NOT EXISTS reports (id SERIAL, name VARCHAR, email VARCHAR, message TEXT, date TIMESTAMP DEFAULT NOW());`);
+    await c.query(`
+      CREATE TABLE IF NOT EXISTS manufacturers (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        company_name VARCHAR(100),
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+      
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        serial_number VARCHAR(50) UNIQUE NOT NULL,
+        product_name VARCHAR(100),
+        brand VARCHAR(100),
+        manufacture_date DATE,
+        manufacturer_id INTEGER REFERENCES manufacturers(id),
+        registered_at TIMESTAMP DEFAULT NOW()
+      );
+
+      CREATE TABLE IF NOT EXISTS reports (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100),
+        email VARCHAR(100),
+        message TEXT,
+        date TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    
+    // Add manufacturer_id column if it doesn't exist (in case products table already existed)
+    await c.query(`
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS manufacturer_id INTEGER REFERENCES manufacturers(id);
+    `);
     const s = ['APPLE-2024-001', 'NIKE-2024-XYZ', 'SONY-WH1000XM5', 'SAM-GALAXY-S24'];
     await c.query('DELETE FROM products WHERE serial_number = ANY($1)', [s]);
     await c.query(`INSERT INTO products (serial_number, product_name, brand, manufacture_date) VALUES 

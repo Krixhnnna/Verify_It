@@ -23,6 +23,14 @@ CREATE TABLE products (
   registered_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE reports (
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR(100),
+  email         VARCHAR(100),
+  message       TEXT,
+  date          TIMESTAMP DEFAULT NOW()
+);
+
 
 INSERT INTO products (serial_number, product_name, brand, manufacture_date) VALUES
   ('APPLE-2024-001', 'iPhone 15 Pro', 'Apple', '2024-01-10'),
