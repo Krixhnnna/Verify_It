@@ -10,17 +10,34 @@
 
 <nav>
   <a href="/" class="nav-logo">Verify<span>It</span></a>
-  <button class="menu-toggle">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/verify">Verify</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/contact" class="active">Contact</a></li>
-  </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/verify">Verify</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact" class="active">Contact</a></li>
+        <% if (manufacturer) { %>
+          <li><a href="/manufacturer/dashboard">Dashboard</a></li>
+        <% } %>
+      </ul>
+
+      <% if (manufacturer) { %>
+        <div class="nav-user">
+          <span class="user-badge"><%= manufacturer.company_name %></span>
+          <a href="/manufacturer/logout" class="logout-icon">Logout 🚪</a>
+        </div>
+      <% } else { %>
+        <ul class="nav-links">
+          <li><a href="/manufacturer/login">For Manufacturers</a></li>
+        </ul>
+      <% } %>
+
+      <button class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
 </nav>
 
 <div class="page fade-in">

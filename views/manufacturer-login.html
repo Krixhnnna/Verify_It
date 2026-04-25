@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturer Login — VerifyIt</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Verify<span>It</span></a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/verify">Verify</a></li>
+        <% if (manufacturer) { %>
+          <li><a href="/manufacturer/dashboard">Dashboard</a></li>
+        <% } %>
+      </ul>
+
+      <% if (manufacturer) { %>
+        <div class="nav-user">
+          <span class="user-badge"><%= manufacturer.company_name %></span>
+          <a href="/manufacturer/logout" class="logout-icon">Logout 🚪</a>
+        </div>
+      <% } else { %>
+        <ul class="nav-links">
+          <li><a href="/manufacturer/signup">Signup</a></li>
+        </ul>
+      <% } %>
+
+      <button class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- LOGIN SECTION -->
+  <div class="page fade-in">
+    <p class="page-tag">Welcome Back</p>
+    <h1>Manufacturer Login</h1>
+    
+    <% if (error) { %>
+      <p style="color: #ff4757; font-weight: bold;"><%= error %></p>
+    <% } %>
+
+    <form action="/manufacturer/login" method="POST" class="contact-form" style="max-width: 500px; margin: 2rem 0;">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn">Login</button>
+    </form>
+    
+    <p>Don't have an account? <a href="/manufacturer/signup">Sign up here</a>.</p>
+  </div>
+
+  <footer>© 2024 VerifyIt — Counterfeit Detection System</footer>
+
+</body>
+</html>

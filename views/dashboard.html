@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturer Dashboard — VerifyIt</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">Verify<span>It</span></a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/verify">Verify</a></li>
+        <li><a href="/manufacturer/dashboard" class="active">Dashboard</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <span class="user-badge"><%= manufacturer.company_name %></span>
+        <a href="/manufacturer/logout" class="logout-icon">Logout 🚪</a>
+      </div>
+
+      <button class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD SECTION -->
+  <div class="page fade-in">
+    <p class="page-tag">Manufacturer Dashboard</p>
+    <h1>Add New Serial Number</h1>
+    <p>Logged in as: <strong><%= manufacturer.company_name %></strong></p>
+
+    <% if (success) { %>
+      <p style="color: #2ecc71; font-weight: bold;">Serial number added successfully!</p>
+    <% } %>
+    <% if (error) { %>
+      <p style="color: #ff4757; font-weight: bold;"><%= error %></p>
+    <% } %>
+
+    <form action="/manufacturer/add-serial" method="POST" class="contact-form" style="max-width: 500px; margin: 2rem 0;">
+      <div class="form-group">
+        <label for="serial_number">Serial Number</label>
+        <input type="text" id="serial_number" name="serial_number" placeholder="e.g. APPLE-2024-001" required>
+      </div>
+      <div class="form-group">
+        <label for="product_name">Product Name</label>
+        <input type="text" id="product_name" name="product_name" placeholder="e.g. iPhone 15 Pro" required>
+      </div>
+      <div class="form-group">
+        <label for="brand">Brand</label>
+        <input type="text" id="brand" name="brand" value="<%= manufacturer.company_name %>" required>
+      </div>
+      <div class="form-group">
+        <label for="manufacture_date">Manufacture Date</label>
+        <input type="date" id="manufacture_date" name="manufacture_date" required>
+      </div>
+      <button type="submit" class="btn">Register Serial Number</button>
+    </form>
+  </div>
+
+  <footer>© 2024 VerifyIt — Counterfeit Detection System</footer>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+
+CREATE TABLE IF NOT EXISTS manufacturers (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  company_name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+ALTER TABLE products ADD COLUMN IF NOT EXISTS manufacturer_id INTEGER REFERENCES manufacturers(id);

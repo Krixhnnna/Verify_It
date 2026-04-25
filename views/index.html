@@ -7,23 +7,39 @@
   <title>VerifyIt — Authenticity Matters</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
 
   <!-- NAVBAR -->
   <nav>
     <a href="/" class="nav-logo">Verify<span>It</span></a>
-    <button class="menu-toggle">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-    <ul class="nav-links">
-      <li><a href="/" class="active">Home</a></li>
-      <li><a href="/verify">Verify</a></li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/contact">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/verify">Verify</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <% if (manufacturer) { %>
+          <li><a href="/manufacturer/dashboard">Dashboard</a></li>
+        <% } %>
+      </ul>
+      
+      <% if (manufacturer) { %>
+        <div class="nav-user">
+          <span class="user-badge"><%= manufacturer.company_name %></span>
+          <a href="/manufacturer/logout" class="logout-icon">Logout 🚪</a>
+        </div>
+      <% } else { %>
+        <ul class="nav-links">
+          <li><a href="/manufacturer/login">For Manufacturers</a></li>
+        </ul>
+      <% } %>
+
+      <button class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </nav>
 
   <!-- HERO SECTION -->
@@ -34,13 +50,11 @@
       VerifyIt is the world's simplest anti-counterfeit system.
       Verify your product's authenticity in seconds and join the fight against fake goods.
     </p>
-
     <div class="solve-tracker">
       🔍 <span class="solve-count" id="tracker-display">0</span> Counterfeit Items Found!
     </div>
 
     <a href="/verify" class="btn">🚀 Check Counterfeit Now</a>
-
   </div>
 
   <script src="/js/eventdeligation.js"></script>

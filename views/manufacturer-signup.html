@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturer Signup — VerifyIt</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Verify<span>It</span></a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/verify">Verify</a></li>
+        <% if (manufacturer) { %>
+          <li><a href="/manufacturer/dashboard">Dashboard</a></li>
+        <% } %>
+      </ul>
+
+      <% if (manufacturer) { %>
+        <div class="nav-user">
+          <span class="user-badge"><%= manufacturer.company_name %></span>
+          <a href="/manufacturer/logout" class="logout-icon">Logout 🚪</a>
+        </div>
+      <% } else { %>
+        <ul class="nav-links">
+          <li><a href="/manufacturer/login">Login</a></li>
+        </ul>
+      <% } %>
+
+      <button class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- SIGNUP SECTION -->
+  <div class="page fade-in">
+    <p class="page-tag">Join the Network</p>
+    <h1>Manufacturer Signup</h1>
+    <p>Register your company to start protecting your products.</p>
+
+    <form action="/manufacturer/signup" method="POST" class="contact-form" style="max-width: 500px; margin: 2rem 0;">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Choose a username" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="company@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="company_name">Company Name</label>
+        <input type="text" id="company_name" name="company_name" placeholder="Brand Name" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+    
+    <p>Already have an account? <a href="/manufacturer/login">Login here</a>.</p>
+  </div>
+
+  <footer>© 2024 VerifyIt — Counterfeit Detection System</footer>
+
+</body>
+</html>

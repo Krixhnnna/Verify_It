@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3005;
 
 // --- Database Configuration ---
 const pool = new Pool(process.env.DATABASE_URL ? {
@@ -24,6 +26,24 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'verify-it-secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+
+// --- Auth Middleware ---
+const isAuthenticated = (req, res, next) => {
+  if (req.session.manufacturer) return next();
+  res.redirect('/manufacturer/login');
+};
+
+// Global Middleware for Views
+app.use((req, res, next) => {
+  res.locals.manufacturer = req.session.manufacturer || null;
+  next();
+});
 
 // --- Routes ---
 
@@ -77,6 +97,74 @@ app.post('/contact', async (req, res) => {
     console.error('DB Report Error:', err.message);
     res.render('contact.html', { sent: false });
   }
+});
+
+// --- Manufacturer Routes ---
+
+app.get('/manufacturer/signup', (req, res) => {
+  res.render('manufacturer-signup.html');
+});
+
+app.post('/manufacturer/signup', async (req, res) => {
+  const { username, email, password, company_name } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await pool.query(
+      'INSERT INTO manufacturers (username, email, password, company_name) VALUES ($1, $2, $3, $4)',
+      [username, email, hashedPassword, company_name]
+    );
+    res.redirect('/manufacturer/login');
+  } catch (err) {
+    res.status(500).send('Error during signup: ' + err.message);
+  }
+});
+
+app.get('/manufacturer/login', (req, res) => {
+  res.render('manufacturer-login.html', { error: null });
+});
+
+app.post('/manufacturer/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const { rows } = await pool.query('SELECT * FROM manufacturers WHERE username = $1', [username]);
+    if (rows.length > 0) {
+      const match = await bcrypt.compare(password, rows[0].password);
+      if (match) {
+        req.session.manufacturer = rows[0];
+        return res.redirect('/manufacturer/dashboard');
+      }
+    }
+    res.render('manufacturer-login.html', { error: 'Invalid username or password' });
+  } catch (err) {
+    res.status(500).send('Error during login: ' + err.message);
+  }
+});
+
+app.get('/manufacturer/dashboard', isAuthenticated, (req, res) => {
+  res.render('dashboard.html', { 
+    manufacturer: req.session.manufacturer,
+    success: req.query.success === 'true',
+    error: req.query.error || null
+  });
+});
+
+app.post('/manufacturer/add-serial', isAuthenticated, async (req, res) => {
+  const { serial_number, product_name, brand, manufacture_date } = req.body;
+  const manufacturer_id = req.session.manufacturer.id;
+  try {
+    await pool.query(
+      'INSERT INTO products (serial_number, product_name, brand, manufacture_date, manufacturer_id) VALUES ($1, $2, $3, $4, $5)',
+      [serial_number.toUpperCase(), product_name, brand, manufacture_date, manufacturer_id]
+    );
+    res.redirect('/manufacturer/dashboard?success=true');
+  } catch (err) {
+    res.redirect(`/manufacturer/dashboard?error=${encodeURIComponent(err.message)}`);
+  }
+});
+
+app.get('/manufacturer/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
 });
 
 // --- Server Bootstrap ---

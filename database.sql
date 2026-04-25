@@ -4,12 +4,22 @@ CREATE DATABASE counterfeit_db;
 
 \c counterfeit_db;
 
+CREATE TABLE manufacturers (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  company_name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 CREATE TABLE products (
   id            SERIAL PRIMARY KEY,
   serial_number VARCHAR(50) UNIQUE NOT NULL,
   product_name  VARCHAR(100),
   brand         VARCHAR(100),
   manufacture_date DATE,
+  manufacturer_id INTEGER REFERENCES manufacturers(id),
   registered_at TIMESTAMP DEFAULT NOW()
 );
 

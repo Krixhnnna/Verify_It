@@ -10,11 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 Redirecting to verification engine...');
         }
         
-        // Mobile Menu Toggle logic
-        if (target.closest('.menu-toggle')) {
-            target.closest('nav').classList.toggle('nav-active');
-        }
-        
         // Example: Handle logo clicks
     });
 
