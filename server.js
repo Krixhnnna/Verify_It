@@ -66,6 +66,10 @@ app.get('/verify', (req, res) => {
   res.render('verify.html', { result: null, serial: null });
 });
 
+
+
+
+
 app.post('/check', async (req, res) => {
   const serial = req.body.serial_number.trim().toUpperCase();
   try {
@@ -79,6 +83,10 @@ app.post('/check', async (req, res) => {
     res.render('verify.html', { result: 'error', serial: serial, product: null });
   }
 });
+
+
+
+
 
 // Contact Reporting
 app.get('/contact', (req, res) => {
@@ -125,6 +133,13 @@ app.get('/manufacturer/login', (req, res) => {
 
 app.post('/manufacturer/login', async (req, res) => {
   const { username, password } = req.body;
+  
+  // Default admin login
+  if (username === 'admin' && password === '123') {
+    req.session.manufacturer = { id: 0, username: 'admin', company_name: 'System Admin' };
+    return res.redirect('/manufacturer/manage');
+  }
+
   try {
     const { rows } = await pool.query('SELECT * FROM manufacturers WHERE username = $1', [username]);
     if (rows.length > 0) {
