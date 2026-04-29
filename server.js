@@ -135,21 +135,7 @@ app.post('/manufacturer/login', async (req, res) => {
   const { username, password } = req.body;
   
   try {
-    // Default admin login with DB sync
-    if (username === 'admin' && password === '123') {
-      let adminResult = await pool.query("SELECT * FROM manufacturers WHERE username = 'admin'");
-      
-      if (adminResult.rows.length === 0) {
-        const hash = await bcrypt.hash('123', 10);
-        adminResult = await pool.query(
-          "INSERT INTO manufacturers (username, email, password, company_name) VALUES ('admin', 'admin@system.com', $1, 'System Admin') RETURNING *",
-          [hash]
-        );
-      }
-      
-      req.session.manufacturer = adminResult.rows[0];
-      return res.redirect('/manufacturer/manage');
-    }
+
 
     const { rows } = await pool.query('SELECT * FROM manufacturers WHERE username = $1', [username]);
     if (rows.length > 0) {
